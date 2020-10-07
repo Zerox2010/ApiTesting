@@ -1,0 +1,624 @@
+{
+	"info": {
+		"_postman_id": "c5916913-6783-457c-a6dc-04377ee58ef3",
+		"name": "Circle-QC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ShortLink",
+			"item": [
+				{
+					"name": "ShortLink Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3706c140-5522-4007-9de4-13e0811659f6",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let product_id = pm.variables.get(\"id\");",
+									"console.log(\"ID is:\" + product_id);",
+									"",
+									"var jsonData = pm.response.json();",
+									"   ",
+									"let pathLink = pm.variables.get(\"path\")+product_id;",
+									"console.log(\"ID is:\" + pathLink);",
+									"",
+									"",
+									"pm.test(\"Validate the DeepLink URL \", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.deep_link_url).to.eql(pathLink);",
+									"    });",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "beb88357-ca39-4ac2-8af7-bfa1ff0f0b5c",
+								"exec": [
+									"//let urlVar = pm.variables.get(\"link\");",
+									"//console.log(\"url is: \"+urlVar);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.branch.io/v1/url?url={{deep link}}&branch_key={{key}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"branch",
+								"io"
+							],
+							"path": [
+								"v1",
+								"url"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "{{deep link}}"
+								},
+								{
+									"key": "branch_key",
+									"value": "{{key}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "AAW",
+			"item": [
+				{
+					"name": "Setup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0193199e-05a5-4b2f-81c8-7f3750fc866d",
+								"exec": [
+									"pm.globals.set(\"Papalibrary\", responseBody);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://raw.githubusercontent.com/mholt/PapaParse/master/papaparse.min.js",
+							"protocol": "https",
+							"host": [
+								"raw",
+								"githubusercontent",
+								"com"
+							],
+							"path": [
+								"mholt",
+								"PapaParse",
+								"master",
+								"papaparse.min.js"
+							]
+						},
+						"description": "Setup the 3rd party to parse the csv response"
+					},
+					"response": []
+				},
+				{
+					"name": "AAW",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d24711c3-5d25-4c93-820e-33b4aba75cb0",
+								"exec": [
+									"// 1. Setup\r",
+									"eval(pm.globals.get(\"Papalibrary\"));\r",
+									"var Papa = this.Papa;\r",
+									"\r",
+									"\r",
+									"\r",
+									"// 2. Configure Papa\r",
+									"const parserConfig = {\r",
+									"    header: true\r",
+									"};\r",
+									"\r",
+									"\r",
+									"// 3. Parse the response body\r",
+									"var parsedBody = Papa.parse(responseBody, parserConfig);\r",
+									"console.log(parsedBody);\r",
+									"\r",
+									"// 4. Set the variables.\r",
+									" let Sku_Ref = pm.variables.get(\"Sku Reference\");\r",
+									"    console.log(\"Sku Reference:\" +Sku_Ref);\r",
+									" let Item_Price = pm.variables.get(\"Price\");\r",
+									"    console.log(\"Item Price:\" +Item_Price);\r",
+									" let Item_Stock = pm.variables.get(\"Stock\");\r",
+									"    console.log(\"Item Stock:\" +Item_Stock);\r",
+									"    \r",
+									"// 5. Tests\r",
+									"pm.test(\"dsfsF\", function() {\r",
+									"    for(let crocs of parsedBody.data) {\r",
+									"       // console.log(parsedBody.data);\r",
+									"        if (crocs.SecondItem === \"Sku_Ref\" && crocs.DIV_CODE === \"CRC\" /*Sku_Ref*/ ) {\r",
+									"            console.log(\"Stock:\" + crocs.PRICE);\r",
+									"           // pm.expect(crocs.Qty).to.eql(\"25\");\r",
+									"        pm.expect(crocs.Qty).to.eql(Item_Stock);\r",
+									"        }\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "bearer 4ab3ef92-73ae-4ae2-893e-e9cee4a2a75f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/api/integrate/1",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"integrate",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AAW Response",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "bearer 4ab3ef92-73ae-4ae2-893e-e9cee4a2a75f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/api/integrate/1",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"integrate",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update AAW Response ",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "bearer 4ab3ef92-73ae-4ae2-893e-e9cee4a2a75f",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"price\": 505,\r\n        \"qty\": 50,\r\n        \"skuReference\": \"2012A821-500-XL\"\r\n    },\r\n    {\r\n        \"price\": 99,\r\n        \"qty\": 3,\r\n        \"skuReference\":\"2012A821-500-L\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/integrate/aaw/sku-updates/INT",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"integrate",
+								"aaw",
+								"sku-updates",
+								"INT"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Compare AAW with current",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Discovery Page",
+			"item": [
+				{
+					"name": "Discovery Page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "36c53a23-2cfd-44ce-8506-8453e8dc5659",
+								"exec": [
+									"// 1. Setup\r",
+									"eval(pm.globals.get(\"Papalibrary\"));\r",
+									"var Papa = this.Papa;\r",
+									"\r",
+									"\r",
+									"\r",
+									"// 2. Configure Papa\r",
+									"const parserConfig = {\r",
+									"    header: true\r",
+									"};\r",
+									"\r",
+									"\r",
+									"// 3. Parse the response body\r",
+									"var parsedBody = Papa.parse(responseBody, parserConfig);\r",
+									"console.log(parsedBody);\r",
+									"\r",
+									"// 4. Set the variables.\r",
+									" let Sku_Ref = pm.variables.get(\"Sku Reference\");\r",
+									"    console.log(\"Sku Reference:\" +Sku_Ref);\r",
+									" let Item_Price = pm.variables.get(\"Price\");\r",
+									"    console.log(\"Item Price:\" +Item_Price);\r",
+									" let Item_Stock = pm.variables.get(\"Stock\");\r",
+									"    console.log(\"Item Stock:\" +Item_Stock);\r",
+									"    \r",
+									"// 5. Tests\r",
+									"pm.test(\"dsfsF\", function() {\r",
+									"    for(let crocs of parsedBody.data) {\r",
+									"       // console.log(parsedBody.data);\r",
+									"        if (crocs.SecondItem === \"Sku_Ref\" && crocs.DIV_CODE === \"CRC\" /*Sku_Ref*/ ) {\r",
+									"            console.log(\"Stock:\" + crocs.PRICE);\r",
+									"           // pm.expect(crocs.Qty).to.eql(\"25\");\r",
+									"        pm.expect(crocs.Qty).to.eql(Item_Stock);\r",
+									"        }\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "bearer 4ab3ef92-73ae-4ae2-893e-e9cee4a2a75f",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/api/integrate/1",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"integrate",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Search",
+			"item": [
+				{
+					"name": "Search Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f8149875-24db-4781-abcb-b390840711c8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"let e_name = pm.variables.get(\"english_name\");\r",
+									"console.log(\"Product Name is:\" +e_name);\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"console.log(jsonData.products);\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate Product Name\", function () {\r",
+									"\r",
+									"var product_nnnn = jsonData.products.name;\r",
+									"    console.log(jsonData.products.name)\r",
+									"    \r",
+									"let crocs = jsonData.products;\r",
+									"    pm.expect(\"Cool Water for Women, edT 100ml by Davidoff\").to.eql(jsonData.products.name);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"/*\r",
+									"pm.test(\"Validate Product Name\", function() {\r",
+									"    for(let crocs of jsonData.products) {\r",
+									"       \r",
+									"        if (\"Women's Top - Gray\" == crocs.name) {\r",
+									"            \r",
+									"       // pm.expect(crocs.name).to.eql(e_name);\r",
+									"        console.log(\" name :\" + crocs.name);\r",
+									"        console.log(\"id is:\" + crocs.id);\r",
+									"        }\r",
+									"        else{\r",
+									"            console.log(\"Product\" + \"  \" +\"Women's Top - Gray\" + \"   \"+ \"Not Found\")\r",
+									"        }\r",
+									"    }\r",
+									"});\r",
+									"*/\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "a",
+								"type": "text",
+								"value": "AgSB9ASB8QDvAHYAu9nfvB+KcbWTlCOXqpJ7RzhXlQqrUugakJZkNo4e0YUAAAFq"
+							}
+						],
+						"url": {
+							"raw": "{{s}}/api/_search/?query=Women",
+							"host": [
+								"{{s}}"
+							],
+							"path": [
+								"api",
+								"_search",
+								""
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "Women"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Indexing",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{admin-server}}/api/elasticsearch/index",
+							"host": [
+								"{{admin-server}}"
+							],
+							"path": [
+								"api",
+								"elasticsearch",
+								"index"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "46cd4ee9-0a09-4117-a8ac-7bbf49e8208e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f61cee5f-51bf-48ba-98a5-3eb02ac725a9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "033054a8-4886-45ed-8e99-275a4e6634f5",
+			"key": "key",
+			"value": "key_live_gpGxyO9SsJlcBJgZ6gC5LmhbErkm8dBF"
+		},
+		{
+			"id": "7a04bd2c-bd1d-4adc-a1ee-929a0ba308eb",
+			"key": "url",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "d1f3bc86-8704-4628-8500-31f01cbf145d",
+			"key": "deep_link_url",
+			"value": ""
+		},
+		{
+			"id": "8fd5334f-555d-4586-a82b-836cd8046bfb",
+			"key": "$deeplink_path",
+			"value": ""
+		},
+		{
+			"id": "b6febfd6-7636-4a01-b89c-4c5b7ce181be",
+			"key": "$og_title",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "580ef437-c37b-416a-b45e-608cafd1299c",
+			"key": "prod_id",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "997931d3-5dd2-4fcb-985c-8b16e9f4c9bc",
+			"key": "Sku_Reference",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "f9600092-a45f-45b4-ae83-249c9e9aa433",
+			"key": "Stock",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "69e4cc13-ec83-4865-b4ce-13fbabac820b",
+			"key": "Price",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "3ecf8795-32bf-4215-88e5-f73bb4154d92",
+			"key": "DIV_CODE",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "3503f181-e46b-4051-84ac-ab63a5917ef1",
+			"key": "Sku_Ref",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "0b9c9531-8fe8-4a40-b27e-234393941af5",
+			"key": "Item_Price",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "a1f64245-a276-41f2-9465-c5fe44ce4b69",
+			"key": "Stock_QTY",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "3d539fb1-9655-4b52-a341-7a50af381a8a",
+			"key": "Item_Stock",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "e3451624-88c4-4d26-95d1-28a9379b1d13",
+			"key": "e_name",
+			"value": ""
+		},
+		{
+			"id": "7f895ea9-e085-486f-a7b7-51aae46eda36",
+			"key": "english_name",
+			"value": ""
+		},
+		{
+			"id": "346cb619-8d1c-4e7e-b63a-01d793a1b753",
+			"key": "url1",
+			"value": "app://trycircle/products/"
+		},
+		{
+			"id": "cab87162-ef27-4d50-a698-3d44074b7b5b",
+			"key": "pathLink",
+			"value": ""
+		},
+		{
+			"id": "8380f10c-5896-4570-bc39-417b5d8cf0a6",
+			"key": "deep link",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
