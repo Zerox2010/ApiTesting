@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "a8212434-45d7-4001-9704-1abe53b67558",
+		"name": "Circle-QC DeepLinks",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ShortLink",
+			"item": [
+				{
+					"name": "ShortLink Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c245ae80-7267-4783-80a9-3bde2448e863",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let product_id = pm.variables.get(\"id\");",
+									"console.log(\"ID is:\" + product_id);",
+									"",
+									"var jsonData = pm.response.json();",
+									"   ",
+									"let pathLink = pm.variables.get(\"path\")+product_id;",
+									"console.log(\"ID is:\" + pathLink);",
+									"",
+									"",
+									"pm.test(\"Validate the DeepLink URL \", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.deep_link_url).to.eql(pathLink);",
+									"    });",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "97e1b9de-1ff3-4634-badf-714887e48116",
+								"exec": [
+									"//let urlVar = pm.variables.get(\"link\");",
+									"//console.log(\"url is: \"+urlVar);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.branch.io/v1/url?url={{deep link}}&branch_key={{key}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"branch",
+								"io"
+							],
+							"path": [
+								"v1",
+								"url"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "{{deep link}}"
+								},
+								{
+									"key": "branch_key",
+									"value": "{{key}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "51729aac-24ba-4458-afb9-4b62a2061ea7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "bae4b3dc-8fef-4054-861c-55d967bb0862",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "cbce76c6-d7e6-463e-87ab-4ec3022fe881",
+			"key": "key",
+			"value": "key_live_gpGxyO9SsJlcBJgZ6gC5LmhbErkm8dBF"
+		},
+		{
+			"id": "470d5765-a983-4a92-8cae-6254daa33e42",
+			"key": "url",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "29da699e-e04b-4881-b655-aaac2ed4553c",
+			"key": "deep_link_url",
+			"value": ""
+		},
+		{
+			"id": "1c062975-267b-48cd-a3dc-c7ae3bc6c63b",
+			"key": "$deeplink_path",
+			"value": ""
+		},
+		{
+			"id": "2dd6d711-c3bb-4cba-a41d-24aad494e7a7",
+			"key": "$og_title",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "01a8c7ac-f9e6-4a84-9ce1-3a0e000c73c9",
+			"key": "prod_id",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "e845f556-00c1-4002-90ac-6e138802ff4b",
+			"key": "Sku_Reference",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "7e1737e7-f07d-4d2c-9b02-2ce4eec2e426",
+			"key": "Stock",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "011bd1ad-b2b7-43bf-8ad4-1fb7b9975ecf",
+			"key": "Price",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "65b3a52f-e6aa-4cf0-9992-78689095ede7",
+			"key": "DIV_CODE",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "73e59b7e-982f-4ad1-a517-c8f9780fbb54",
+			"key": "Sku_Ref",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "6e6c6246-2fe4-48be-84a6-05fc473aa715",
+			"key": "Item_Price",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "28276c5c-4ef3-46f5-b3d4-ce99403dbc01",
+			"key": "Stock_QTY",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "93b064ea-bb63-4edf-8b2a-2f1e7b4bfab7",
+			"key": "Item_Stock",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"id": "2b38492c-f1fb-4c0f-90ca-df70cc1008e8",
+			"key": "e_name",
+			"value": ""
+		},
+		{
+			"id": "7dffcb78-0aef-4216-9934-207a366bd7a6",
+			"key": "english_name",
+			"value": ""
+		},
+		{
+			"id": "1cc3bc20-467d-4dbc-9d16-1317a2c838de",
+			"key": "url1",
+			"value": "app://trycircle/products/"
+		},
+		{
+			"id": "a7ce9de1-9d01-4b13-8b14-f4cd650180a2",
+			"key": "pathLink",
+			"value": ""
+		},
+		{
+			"id": "0d46d7e6-cdd0-4ffe-b97f-9bae5a6f8676",
+			"key": "deep_link",
+			"value": ""
+		},
+		{
+			"id": "86fa615e-351d-4b92-8145-bcf01b58a7bb",
+			"key": "path",
+			"value": "app://trycircle/products/"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
